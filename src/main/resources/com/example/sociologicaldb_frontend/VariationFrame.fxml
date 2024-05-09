@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.sociologicaldb_frontend.VariationFrameController">
+   <children>
+      <TabPane layoutY="86.0" prefHeight="289.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="86.0">
+         <tabs>
+            <Tab text="Таблица">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="274.0" prefWidth="600.0">
+                     <children>
+                        <TableView fx:id="tableView" layoutX="63.0" layoutY="21.0" prefHeight="234.0" prefWidth="484.0" />
+                     </children>
+                  </AnchorPane>
+               </content>
+            </Tab>
+            <Tab text="Графики">
+               <content>
+                  <AnchorPane fx:id="graphPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+            </Tab>
+         </tabs>
+      </TabPane>
+      <ImageView fx:id="logoImage" fitHeight="50.0" fitWidth="50.0" layoutX="551.0" layoutY="350.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <image>
+            <Image url="@image/unn_logo.png" />
+         </image>
+      </ImageView>
+      <GridPane layoutX="91.2" layoutY="6.4" prefHeight="82.0" prefWidth="295.0" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="5.0">
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="128.199951171875" minWidth="10.0" prefWidth="99.39998779296874" />
+            <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.4000122070312" minWidth="10.0" prefWidth="186.4000122070312" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints maxHeight="28.60001220703125" minHeight="10.0" prefHeight="27.000006103515624" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="39.00001220703125" minHeight="10.0" prefHeight="26.99997940063476" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="35.7999900817871" minHeight="10.0" prefHeight="28.600020599365237" vgrow="SOMETIMES" />
+         </rowConstraints>
+         <children>
+            <Label alignment="CENTER_RIGHT" prefHeight="29.0" prefWidth="108.0" text="Таблица: ">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="tableName" prefHeight="26.0" prefWidth="173.0" GridPane.columnIndex="1" />
+            <Label alignment="CENTER_RIGHT" prefHeight="22.0" prefWidth="106.0" text="Параметр: " GridPane.rowIndex="1">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="attributeName" prefHeight="26.0" prefWidth="173.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <CheckBox fx:id="varCheckBox" mnemonicParsing="false" prefHeight="18.0" prefWidth="183.0" text="Без группировки значений" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <Button layoutX="415.0" layoutY="33.0" mnemonicParsing="false"  prefHeight="26.0" prefWidth="90.0" text="Вычислить" AnchorPane.leftAnchor="415.0" AnchorPane.rightAnchor="94.4" AnchorPane.topAnchor="33.0" />
+      <!-- onAction="#onCalcVariationButtonClick" -->
+   </children>
+</AnchorPane>
