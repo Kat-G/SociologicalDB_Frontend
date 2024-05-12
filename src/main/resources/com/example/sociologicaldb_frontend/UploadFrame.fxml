@@ -10,9 +10,9 @@
       <ComboBox fx:id="nameField" layoutX="255.0" layoutY="94.0" prefWidth="150.0" />
       <Label alignment="CENTER_RIGHT" layoutX="85.0" layoutY="171.0" prefHeight="33.0" prefWidth="163.0" text="Выбор файла: " />
       <Button fx:id="fileButton" layoutX="255.0" layoutY="173.0" mnemonicParsing="false" onAction="#onFileButtonClick" prefHeight="30.0" prefWidth="100.0" text="Выбрать" />
-      <Button layoutX="213.0" layoutY="219.0" mnemonicParsing="false" prefHeight="30.0" prefWidth="107.0" text="Загрузить" />
+      <Button layoutX="213.0" layoutY="219.0" mnemonicParsing="false" onAction="#onRequestButtonClick" prefHeight="30.0" prefWidth="107.0" text="Загрузить" />
       <!--
-      onAction="#onRequestButtonClick -->
+       -->
       <ImageView fx:id="logoImage" fitHeight="55.0" fitWidth="55.0" layoutX="446.0" layoutY="292.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <image>
             <Image url="@image/unn_logo.png" />

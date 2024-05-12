@@ -28,6 +28,7 @@ public class MainFXApplication extends Application {
         Parent root = fxWeaver.loadView(MainFrameController.class);
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setTitle("SociologicalDB");
         stage.show();
     }
 

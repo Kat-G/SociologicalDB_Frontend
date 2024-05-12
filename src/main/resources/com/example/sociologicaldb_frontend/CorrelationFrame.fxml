@@ -39,7 +39,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.CorrelationFrameController">
    <children>
-      <TabPane layoutY="86.0" prefHeight="289.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="86.0">
+      <TabPane fx:id="tabPane" layoutY="86.0" prefHeight="289.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" visible="false" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="86.0">
          <tabs>
             <Tab text="Таблица">
                <content>
@@ -48,11 +48,6 @@
                         <TableView fx:id="tableView" layoutX="63.0" layoutY="21.0" prefHeight="234.0" prefWidth="484.0" />
                      </children>
                   </AnchorPane>
-               </content>
-            </Tab>
-            <Tab text="Графики">
-               <content>
-                  <AnchorPane fx:id="graphPane" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
                </content>
             </Tab>
          </tabs>
@@ -88,7 +83,6 @@
             <ComboBox fx:id="tableNameTwo" prefHeight="26.0" prefWidth="160.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <Button layoutX="415.0" layoutY="33.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="90.0" text="Вычислить" AnchorPane.leftAnchor="415.0" AnchorPane.rightAnchor="94.4" AnchorPane.topAnchor="33.0" />
-       <!--onAction="#onCalcCorrelationButtonClick" -->
+      <Button layoutX="415.0" layoutY="33.0" mnemonicParsing="false" onAction="#onCalcCorrelationButtonClick" prefHeight="26.0" prefWidth="90.0" text="Вычислить" AnchorPane.leftAnchor="415.0" AnchorPane.rightAnchor="94.4" AnchorPane.topAnchor="33.0" />
    </children>
 </AnchorPane>

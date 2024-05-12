@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 
 import java.io.File;
 
-import static jdk.jfr.consumer.EventStream.openFile;
 
 @Component
 @FxmlView("UploadFrame.fxml")
@@ -20,7 +19,12 @@ public class UploadFrameController {
     private ConfigurableApplicationContext applicationContext;
     final FileChooser fileChooser = new FileChooser();
     @FXML
+    private ComboBox nameField;
+    @FXML
+    private TextField organizationName;
+    @FXML
     private Button fileButton;
+    private File selectedFile;
 
     @Autowired
     public UploadFrameController(ConfigurableApplicationContext applicationContext) {
@@ -30,7 +34,16 @@ public class UploadFrameController {
     public void onFileButtonClick(ActionEvent actionEvent) {
         Stage stage = (Stage)fileButton.getScene().getWindow();
         fileChooser.setTitle("Выберите файл");
-        File selectedFile = fileChooser.showOpenDialog(stage);
+        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        selectedFile = fileChooser.showOpenDialog(stage);
+    }
+
+    public void onRequestButtonClick(ActionEvent actionEvent) {
+        // отправка данных - nameField.getValue(), organizationName.getText(), selectedFile
+        // проверка на null перед
+
+        // при получении ответа - вывод сообщения в statusLabel
     }
 
 }

@@ -69,6 +69,7 @@ public class MainFrameController {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("Загрузка исследования");
         stage.show();
     }
 
@@ -78,6 +79,7 @@ public class MainFrameController {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("Корреляционная матрица");
         stage.show();
     }
     public void onVariationButtonClick(ActionEvent actionEvent) {
@@ -86,12 +88,7 @@ public class MainFrameController {
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
+        stage.setTitle("Вариационный ряд");
         stage.show();
     }
-
-    /*
-    public void start(ActionEvent actionEvent) {
-
-    }
-     */
 }
