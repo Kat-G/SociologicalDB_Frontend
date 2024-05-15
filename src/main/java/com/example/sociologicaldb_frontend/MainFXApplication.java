@@ -1,5 +1,6 @@
 package com.example.sociologicaldb_frontend;
 
+import com.example.sociologicaldb_frontend.frames.MainFrameController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.scene.Parent;

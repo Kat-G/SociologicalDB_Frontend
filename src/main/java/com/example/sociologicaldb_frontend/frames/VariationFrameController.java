@@ -1,4 +1,4 @@
-package com.example.sociologicaldb_frontend;
+package com.example.sociologicaldb_frontend.frames;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

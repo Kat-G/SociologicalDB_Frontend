@@ -4,7 +4,7 @@
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.UploadFrameController">
+<AnchorPane prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.UploadFrameController">
    <children>
       <Label alignment="CENTER_RIGHT" layoutX="85.0" layoutY="90.0" prefHeight="33.0" prefWidth="163.0" text="Название исследования:" />
       <ComboBox fx:id="nameField" layoutX="255.0" layoutY="94.0" prefWidth="150.0" />
@@ -15,7 +15,7 @@
        -->
       <ImageView fx:id="logoImage" fitHeight="55.0" fitWidth="55.0" layoutX="446.0" layoutY="292.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <image>
-            <Image url="@image/unn_logo.png" />
+            <Image url="@../image/unn_logo.png" />
          </image>
       </ImageView>
       <Label fx:id="statusLabel" layoutX="175.0" layoutY="250.0" prefHeight="30.0" prefWidth="183.0" textAlignment="CENTER" AnchorPane.bottomAnchor="74.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="141.60000000000002" AnchorPane.topAnchor="250.0" />

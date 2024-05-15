@@ -44,7 +44,7 @@
 <?import javafx.scene.layout.VBox?>
 
 <VBox prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="com.example.sociologicaldb_frontend.MainFrameController">
+      fx:controller="com.example.sociologicaldb_frontend.frames.MainFrameController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -60,7 +60,7 @@
                   <MenuItem mnemonicParsing="false" onAction="#onVariationButtonClick" text="Variation" />
                   <MenuItem mnemonicParsing="false"  text="Pearson" />
                   <MenuItem mnemonicParsing="false"  text="Grouping" />
-                  <MenuItem mnemonicParsing="false"  text="MAI" />
+                  <MenuItem mnemonicParsing="false" onAction="#onMAIButtonClick" text="MAI" />
                    <!--
                    onAction="#onPearsonButtonClick"
                    onAction="#onGroupingButtonClick"
@@ -74,12 +74,12 @@
             <TreeView fx:id="treeView" prefHeight="474.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <ImageView fx:id="logoImage" fitHeight="55.0" fitWidth="55.0" layoutX="645.0" layoutY="419.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <image>
-                  <Image url="@image/unn_logo.png"/>
+                  <Image url="@../image/unn_logo.png"/>
                </image>
             </ImageView>
             <Label layoutX="246.0" layoutY="26.0" prefHeight="26.0" prefWidth="154.0" text="Количество респондентов:" />
             <Label fx:id="respLabel" layoutX="402.0" layoutY="30.0" prefHeight="18.0" prefWidth="76.0" />
-            <Button layoutX="611.0" layoutY="350.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="MAI" AnchorPane.rightAnchor="14.40000000000002" AnchorPane.topAnchor="350.0" />
+            <Button layoutX="611.0" layoutY="350.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" onAction="#onMAIButtonClick" text="MAI" AnchorPane.rightAnchor="14.40000000000002" AnchorPane.topAnchor="350.0" />
             <Button layoutX="611.0" layoutY="290.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Grouping" AnchorPane.rightAnchor="14.40000000000002" AnchorPane.topAnchor="290.0" />
             <Button layoutX="611.0" layoutY="230.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" text="Pearson" AnchorPane.rightAnchor="14.40000000000002" AnchorPane.topAnchor="230.0" />
             <Button layoutX="611.0" layoutY="170.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="75.0" onAction="#onVariationButtonClick" text="Variation" AnchorPane.rightAnchor="14.40000000000002" AnchorPane.topAnchor="170.0" />

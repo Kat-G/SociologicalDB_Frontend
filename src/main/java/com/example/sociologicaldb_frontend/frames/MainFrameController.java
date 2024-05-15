@@ -1,4 +1,4 @@
-package com.example.sociologicaldb_frontend;
+package com.example.sociologicaldb_frontend.frames;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -91,4 +91,15 @@ public class MainFrameController {
         stage.setTitle("Вариационный ряд");
         stage.show();
     }
+
+    public void onMAIButtonClick(ActionEvent actionEvent) {
+        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
+        Parent root = fxWeaver.loadView(MAIStepOneFrameController.class);
+        Scene scene = new Scene(root);
+        Stage stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("МАИ. Задание иерархии");
+        stage.show();
+    }
+
 }

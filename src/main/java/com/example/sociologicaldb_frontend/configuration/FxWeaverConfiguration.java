@@ -1,4 +1,4 @@
-package com.example.sociologicaldb_frontend;
+package com.example.sociologicaldb_frontend.configuration;
 
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.spring.SpringFxWeaver;
