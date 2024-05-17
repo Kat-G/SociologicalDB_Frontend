@@ -1,0 +1,26 @@
+.button {
+    -fx-background-color: #0f68aa;
+    -fx-text-fill: white;
+}
+
+.button:hover {
+    -fx-background-color: #2132f3;
+}
+
+.tree-cell:selected {
+    -fx-background-color: #0f68aa;
+}
+
+.menu:hover {
+    -fx-background-color: #0f68aa;
+}
+.menu-item:hover {
+    -fx-background-color: #0f68aa;
+}
+
+.combo-box-base {
+    -fx-background-color: white;
+}
+.combo-box-base .arrow-button .arrow {
+    -fx-background-color: black;
+}
