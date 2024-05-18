@@ -1,5 +1,8 @@
 package com.example.sociologicaldb_frontend.frames;
 
+import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -30,6 +33,23 @@ public class VariationFrameController {
     @Autowired
     public VariationFrameController(ConfigurableApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    @FXML
+    public void initialize() {
+        // Получение списка всех исследований
+        ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
+
+        // Заполнение первого ComboBox
+        tableName.setItems(researchNames);
+
+        // Добавление слушателя для первого ComboBox
+        tableName.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributesForResearch(newValue.toString()));
+                attributeName.setItems(attributeNames);
+            }
+        });
     }
 
     public void onCalcVariationButtonClick(ActionEvent actionEvent) {

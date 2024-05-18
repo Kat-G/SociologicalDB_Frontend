@@ -1,5 +1,8 @@
 package com.example.sociologicaldb_frontend.frames;
 
+import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -10,6 +13,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.util.List;
 
 
 @Component
@@ -29,6 +33,11 @@ public class UploadFrameController {
     @Autowired
     public UploadFrameController(ConfigurableApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    public void initialize() {
+        ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
+        nameField.setItems(researchNames);
     }
 
     public void onFileButtonClick(ActionEvent actionEvent) {

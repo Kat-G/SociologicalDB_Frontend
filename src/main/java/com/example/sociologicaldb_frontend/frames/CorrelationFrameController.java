@@ -1,5 +1,8 @@
 package com.example.sociologicaldb_frontend.frames;
 
+import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -8,6 +11,8 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 
 @Component
@@ -31,6 +36,31 @@ public class CorrelationFrameController {
     @Autowired
     public CorrelationFrameController(ConfigurableApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    @FXML
+    public void initialize() {
+        // Получение списка всех исследований
+        ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
+
+        // Заполнение первого ComboBox
+        tableNameOne.setItems(researchNames);
+
+        // Добавление слушателя для первого ComboBox
+        tableNameOne.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                updateSecondComboBox(newValue.toString(), researchNames);
+            }
+        });
+    }
+
+    private void updateSecondComboBox(String selectedResearch, ObservableList researchNames) {
+        // Создаем новый список, исключая выбранное значение
+        ObservableList<String> updatedResearchNames = FXCollections.observableArrayList(researchNames);
+        updatedResearchNames.remove(selectedResearch);
+
+        // Обновляем второй ComboBox
+        tableNameTwo.setItems(updatedResearchNames);
     }
 
     public void onCorrCheckBoxClick(ActionEvent actionEvent) {
