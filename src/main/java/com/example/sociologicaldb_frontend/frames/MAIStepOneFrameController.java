@@ -1,10 +1,11 @@
 package com.example.sociologicaldb_frontend.frames;
 
+import com.example.sociologicaldb_frontend.configuration.CustomTreeNode;
+import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -20,47 +21,125 @@ public class MAIStepOneFrameController {
 
     @FXML
     private AnchorPane anchorPane;
-
-    private double initialY = 0.0;
-    private int count = 1;
+    @FXML
+    private TreeView<CustomTreeNode> treeView;
+    @FXML
+    private Button addButton;
+    @FXML
+    private Button nextButton;
+    @FXML
+    private RadioButton addNodeRadioButton;
+    @FXML
+    private RadioButton addAttributeRadioButton;
+    @FXML
+    private ComboBox<String> attributeTableComboBox;
+    @FXML
+    private ComboBox<String> attributeComboBox;
+    @FXML
+    private TextField nodeTextField;
 
     @FXML
-    private void onAddTableButtonClick(ActionEvent event) {
-        Label label = new Label("Таблица:");
-        label.setLayoutX(15.0);
-        label.setLayoutY(initialY + 50);
+    public void initialize() {
+        TreeItem<CustomTreeNode> rootItem = new TreeItem<>(new CustomTreeNode("Исследование", false));
+        rootItem.setExpanded(true);
+        treeView.setRoot(rootItem);
 
-        ComboBox<String> comboBox = new ComboBox<>();
-        comboBox.setLayoutX(110.0);
-        comboBox.setLayoutY(initialY + 47);
-        comboBox.setPrefWidth(150);
-        comboBox.setId("tableComboBox"+count);
+        ToggleGroup toggleGroup = new ToggleGroup();
+        addNodeRadioButton.setToggleGroup(toggleGroup);
+        addAttributeRadioButton.setToggleGroup(toggleGroup);
 
-        CheckBox checkBox = new CheckBox("Без атрибутов");
-        checkBox.setLayoutX(265.0);
-        checkBox.setLayoutY(initialY + 51);
-        checkBox.setId("attributeCheckBox"+count);
+        toggleGroup.selectedToggleProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue == addNodeRadioButton) {
+                nodeTextField.setVisible(true);
+                attributeTableComboBox.setVisible(false);
+                attributeComboBox.setVisible(false);
+            } else if (newValue == addAttributeRadioButton) {
+                nodeTextField.setVisible(false);
+                attributeTableComboBox.setVisible(true);
+                attributeComboBox.setVisible(true);
 
-        CheckComboBox<String> checkComboBox = new CheckComboBox<>();
-        checkComboBox.setLayoutX(380.0);
-        checkComboBox.setLayoutY(initialY + 47);
-        checkComboBox.setPrefWidth(150);
-        checkComboBox.setId("attributeComboBox"+count);
+                ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
+                attributeTableComboBox.setItems(researchNames);
+                attributeTableComboBox.getSelectionModel().selectedItemProperty().addListener((observableTwo, oldTableNameValue, newTableNameValue) -> {
+                    if (newTableNameValue != null) {
+                        ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributesForResearch(newTableNameValue.toString()));
 
-        anchorPane.getChildren().addAll(label, comboBox, checkBox, checkComboBox);
-
-        Button addButton = (Button)event.getSource();
-        if (count++ < 4){
-            addButton.setLayoutY(addButton.getLayoutY() + 50);
-        }
-        else
-            addButton.setVisible(false);
-        initialY += 50;
+                        attributeComboBox.setItems(attributeNames);
+                    }
+                });
+            }
+        });
     }
 
     @FXML
-    private void onFurtherButtonClick(ActionEvent event) {
+    private void onAddButtonClick(ActionEvent event) {
+        TreeItem<CustomTreeNode> selectedItem = (TreeItem<CustomTreeNode>)treeView.getSelectionModel().getSelectedItem();
+        if (selectedItem == null) {
+            showAlert("Пожалуйста, выберите элемент дерева.");
+            return;
+        }
+
+        if (addNodeRadioButton.isSelected()) {
+            if (selectedItem.getValue().isAttribute()) {
+                showAlert("Нельзя добавлять узлы к атрибутам.");
+                return;
+            }
+
+            String nodeName = nodeTextField.getText();
+            if (nodeName.isEmpty()) {
+                showAlert("Пожалуйста, введите имя узла.");
+                return;
+            }
+            TreeItem<CustomTreeNode> newNode = new TreeItem<>(new CustomTreeNode(nodeName, false));
+            selectedItem.getChildren().add(newNode);
+            selectedItem.setExpanded(true);
+            nodeTextField.clear();
+        } else if (addAttributeRadioButton.isSelected()) {
+            if (selectedItem.getValue().isAttribute()) {
+                showAlert("Нельзя добавлять атрибуты к атрибутам.");
+                return;
+            }
+            String attribute = attributeComboBox.getSelectionModel().getSelectedItem();
+            String attributeTableName = attributeTableComboBox.getSelectionModel().getSelectedItem();
+            if (attribute == null) {
+                showAlert("Пожалуйста, выберите атрибут.");
+                return;
+            }
+            TreeItem<CustomTreeNode> tableNode = null;
+            for (TreeItem<CustomTreeNode> child : selectedItem.getChildren()) {
+                if (child.getValue().equals(attributeTableName)) {
+                    tableNode = child;
+                    break;
+                }
+            }
+
+            if (tableNode == null) {
+                tableNode = new TreeItem<>(new CustomTreeNode(attributeTableName, true));
+                selectedItem.getChildren().add(tableNode);
+                selectedItem.setExpanded(true);
+            }
+
+            TreeItem<CustomTreeNode> newAttribute = new TreeItem<>(new CustomTreeNode(attribute, true));
+            tableNode.getChildren().add(newAttribute);
+            tableNode.setExpanded(true);
+
+            attributeTableComboBox.getSelectionModel().clearSelection();
+            attributeComboBox.getSelectionModel().clearSelection();
+        }
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Ошибка");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    @FXML
+    private void onNextButtonClick(ActionEvent event) {
         // открытие окна MaiStepTwoFrame, передача выбранных данных
+
     }
 
     @Autowired

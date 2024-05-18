@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public final class TablesInfo {
     public static final Map<String, List<String>> RESEARCH_ATTRIBUTES = Map.of(
             "Вильямс", List.of("Любознательность", "Воображение", "Сложность", "Склонность к рискy"),
-            "Шварц", List.of("Безопасность", "Конформность", "Традиция", "Самостоятельность","Риск–новизна",
+            "Шварц", List.of("Безопасность", "Комфортность", "Традиция", "Самостоятельность","Риск–новизна",
                     "Гедонизм", "Достижение", "Власть–богатство","Благожелательность","Универсализм"),
             "Медник", List.of("случайная;гора;долгожданная", "вечерняя;бумага;стенная", "обратно;родина;путь",
                     "далеко;слепой;будущее", "народная;страх;мировая", "деньги;билет;свободное", "человек;погоны;завод",
@@ -25,6 +25,12 @@ public final class TablesInfo {
     public static List<String> getAllResearchNames() {
         return RESEARCH_ATTRIBUTES.keySet().stream().collect(Collectors.toList());
     }
+
+    /*
+    public static List<String> getAllAttributes() {
+        return RESEARCH_ATTRIBUTES.values().stream().collect(Collectors.toList());
+    }
+     */
 
     private TablesInfo(){}
 }
