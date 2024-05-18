@@ -37,13 +37,10 @@ public class VariationFrameController {
 
     @FXML
     public void initialize() {
-        // Получение списка всех исследований
         ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
 
-        // Заполнение первого ComboBox
         tableName.setItems(researchNames);
 
-        // Добавление слушателя для первого ComboBox
         tableName.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributesForResearch(newValue.toString()));

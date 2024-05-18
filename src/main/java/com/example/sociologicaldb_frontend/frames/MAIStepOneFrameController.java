@@ -5,9 +5,13 @@ import com.example.sociologicaldb_frontend.configuration.TablesInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.controlsfx.control.CheckComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -138,8 +142,25 @@ public class MAIStepOneFrameController {
 
     @FXML
     private void onNextButtonClick(ActionEvent event) {
-        // открытие окна MaiStepTwoFrame, передача выбранных данных
+        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
 
+        // Загрузка нового окна и его контроллера
+        Parent root = fxWeaver.loadView(MAIStepTwoFrameController.class);
+        MAIStepTwoFrameController controller = fxWeaver.getBean(MAIStepTwoFrameController.class);
+
+        // Передача данных в контроллер второго окна
+        controller.initData(treeView.getRoot());
+
+        // Закрытие текущего окна
+        Stage stage = (Stage) anchorPane.getScene().getWindow();
+        stage.close();
+
+        // Открытие нового окна
+        Scene scene = new Scene(root);
+        stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("МАИ. Задание соотношений");
+        stage.show();
     }
 
     @Autowired

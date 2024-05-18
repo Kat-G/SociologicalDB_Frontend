@@ -40,13 +40,10 @@ public class CorrelationFrameController {
 
     @FXML
     public void initialize() {
-        // Получение списка всех исследований
         ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
 
-        // Заполнение первого ComboBox
         tableNameOne.setItems(researchNames);
 
-        // Добавление слушателя для первого ComboBox
         tableNameOne.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
                 updateSecondComboBox(newValue.toString(), researchNames);
@@ -55,11 +52,9 @@ public class CorrelationFrameController {
     }
 
     private void updateSecondComboBox(String selectedResearch, ObservableList researchNames) {
-        // Создаем новый список, исключая выбранное значение
         ObservableList<String> updatedResearchNames = FXCollections.observableArrayList(researchNames);
         updatedResearchNames.remove(selectedResearch);
 
-        // Обновляем второй ComboBox
         tableNameTwo.setItems(updatedResearchNames);
     }
 
