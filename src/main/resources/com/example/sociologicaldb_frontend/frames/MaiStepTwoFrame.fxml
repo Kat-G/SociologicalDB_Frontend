@@ -1,37 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.net.URL?>
-<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="670.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.MAIStepTwoFrameController">
+<AnchorPane fx:id="anchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="646.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.MAIStepTwoFrameController">
     <stylesheets>
         <URL value="@../image/styles.css" />
     </stylesheets>
     <children>
       <Label layoutX="14.0" layoutY="14.0" prefHeight="20.0" prefWidth="155.0" text="Введите нижнюю границу:" />
       <TextField fx:id="lowborderTextField" layoutX="169.0" layoutY="11.0" prefHeight="26.0" prefWidth="67.0" />
-      <Button layoutX="424.0" layoutY="11.0" mnemonicParsing="false" text="Добавить соотношение" AnchorPane.rightAnchor="98.79999999999995" AnchorPane.topAnchor="11.0" />
-      <Button layoutX="580.0" layoutY="11.0" mnemonicParsing="false" text="Вычислить" AnchorPane.rightAnchor="14.799999999999997" AnchorPane.topAnchor="11.0" />
+      <Button layoutX="386.0" onAction="#onAddRelationButtonClick" layoutY="11.0" mnemonicParsing="false" text="Добавить соотношение" AnchorPane.rightAnchor="120.0" AnchorPane.topAnchor="11.0" />
+      <Button layoutX="553.0" onAction="#onCalcMAIButtonClick" layoutY="11.0" mnemonicParsing="false" text="Вычислить" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="11.0" />
       <TreeView fx:id="treeView" layoutX="9.0" layoutY="45.0" prefHeight="346.0" prefWidth="220.0" />
       <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="645.0" layoutY="345.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
         <image>
             <Image url="@../image/unn_logo.png" />
         </image>
       </ImageView>
-      <ScrollPane layoutX="235.0" layoutY="45.0" prefHeight="300.0" prefWidth="360.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="235.20000000000005" AnchorPane.rightAnchor="5.0">
+      <ScrollPane layoutX="235.0" layoutY="45.0" prefHeight="300.0" prefWidth="428.0" AnchorPane.bottomAnchor="55.0" AnchorPane.leftAnchor="235.0" AnchorPane.rightAnchor="7.0">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="302.0" prefWidth="432.0">
-               <children>
-                  <TextField editable="false" layoutX="27.0" layoutY="2.0" prefHeight="26.0" prefWidth="115.0" />
-                  <ComboBox layoutX="151.0" layoutY="1.0" prefHeight="26.0" prefWidth="63.0" promptText="&gt;=" />
-                  <TextField alignment="CENTER" layoutX="222.0" layoutY="1.0" prefHeight="26.0" prefWidth="38.0" text="1" />
-                  <TextField editable="false" layoutX="294.0" layoutY="2.0" prefHeight="26.0" prefWidth="115.0" />
-                  <Button layoutX="2.0" layoutY="2.0" mnemonicParsing="false" text="+" />
-                  <Button layoutX="269.0" layoutY="2.0" mnemonicParsing="false" text="+" />
-               </children>
-            </AnchorPane>
+            <VBox fx:id="contentBox" >
+            </VBox>
         </content>
       </ScrollPane>
    </children>

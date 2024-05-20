@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.controlsfx.control.CheckComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Component;
@@ -44,7 +43,7 @@ public class MAIStepOneFrameController {
 
     @FXML
     public void initialize() {
-        TreeItem<CustomTreeNode> rootItem = new TreeItem<>(new CustomTreeNode("Исследование", false));
+        TreeItem<CustomTreeNode> rootItem = new TreeItem<>(new CustomTreeNode("Исследование", false, null));
         rootItem.setExpanded(true);
         treeView.setRoot(rootItem);
 
@@ -66,7 +65,7 @@ public class MAIStepOneFrameController {
                 attributeTableComboBox.setItems(researchNames);
                 attributeTableComboBox.getSelectionModel().selectedItemProperty().addListener((observableTwo, oldTableNameValue, newTableNameValue) -> {
                     if (newTableNameValue != null) {
-                        ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributesForResearch(newTableNameValue.toString()));
+                        ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributes(newTableNameValue.toString()));
 
                         attributeComboBox.setItems(attributeNames);
                     }
@@ -94,7 +93,8 @@ public class MAIStepOneFrameController {
                 showAlert("Пожалуйста, введите имя узла.");
                 return;
             }
-            TreeItem<CustomTreeNode> newNode = new TreeItem<>(new CustomTreeNode(nodeName, false));
+
+            TreeItem<CustomTreeNode> newNode = new TreeItem<>(new CustomTreeNode(nodeName, false,selectedItem.getValue()));
             selectedItem.getChildren().add(newNode);
             selectedItem.setExpanded(true);
             nodeTextField.clear();
@@ -111,19 +111,19 @@ public class MAIStepOneFrameController {
             }
             TreeItem<CustomTreeNode> tableNode = null;
             for (TreeItem<CustomTreeNode> child : selectedItem.getChildren()) {
-                if (child.getValue().equals(attributeTableName)) {
+                if (child.getValue().getName().equals(attributeTableName)) {
                     tableNode = child;
                     break;
                 }
             }
 
             if (tableNode == null) {
-                tableNode = new TreeItem<>(new CustomTreeNode(attributeTableName, true));
+                tableNode = new TreeItem<>(new CustomTreeNode(attributeTableName, true,selectedItem.getValue()));
                 selectedItem.getChildren().add(tableNode);
                 selectedItem.setExpanded(true);
             }
 
-            TreeItem<CustomTreeNode> newAttribute = new TreeItem<>(new CustomTreeNode(attribute, true));
+            TreeItem<CustomTreeNode> newAttribute = new TreeItem<>(new CustomTreeNode(attribute, true, tableNode.getValue()));
             tableNode.getChildren().add(newAttribute);
             tableNode.setExpanded(true);
 
@@ -133,34 +133,61 @@ public class MAIStepOneFrameController {
     }
 
     private void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Ошибка");
+        Alert alert = new Alert(Alert.AlertType.WARNING);
+        alert.setTitle("Предупреждение");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
     }
 
+    public boolean checkAllNodesAreAttributes(TreeItem<CustomTreeNode> root) {
+        //!!!
+        return true;
+    }
+
+    public boolean allPathsEndWithAttributes(TreeItem<CustomTreeNode> root) {
+        return checkNode(root);
+    }
+
+    private boolean checkNode(TreeItem<CustomTreeNode> node) {
+        if (node == null) {
+            return true;
+        }
+
+        if (node.getChildren().isEmpty()) {
+            return node.getValue().isAttribute();
+        }
+
+        for (TreeItem<CustomTreeNode> child : node.getChildren()) {
+            if (!checkNode(child)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     @FXML
     private void onNextButtonClick(ActionEvent event) {
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-
-        // Загрузка нового окна и его контроллера
-        Parent root = fxWeaver.loadView(MAIStepTwoFrameController.class);
-        MAIStepTwoFrameController controller = fxWeaver.getBean(MAIStepTwoFrameController.class);
-
-        // Передача данных в контроллер второго окна
-        controller.initData(treeView.getRoot());
-
-        // Закрытие текущего окна
-        Stage stage = (Stage) anchorPane.getScene().getWindow();
-        stage.close();
-
-        // Открытие нового окна
-        Scene scene = new Scene(root);
-        stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("МАИ. Задание соотношений");
-        stage.show();
+        if (!allPathsEndWithAttributes(treeView.getRoot())) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Ошибка");
+            alert.setHeaderText(null);
+            alert.setContentText("Все узлы должны заканчиваться атрибутами.");
+            alert.showAndWait();
+        } else {
+            FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
+            Parent root = fxWeaver.loadView(MAIStepTwoFrameController.class);
+            MAIStepTwoFrameController controller = fxWeaver.getBean(MAIStepTwoFrameController.class);
+            controller.initData(treeView.getRoot());
+            Stage stage = (Stage) anchorPane.getScene().getWindow();
+            stage.close();
+            Scene scene = new Scene(root);
+            stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("МАИ. Задание соотношений");
+            stage.show();
+        }
     }
 
     @Autowired

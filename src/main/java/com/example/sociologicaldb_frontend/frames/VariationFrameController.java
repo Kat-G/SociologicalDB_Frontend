@@ -43,7 +43,7 @@ public class VariationFrameController {
 
         tableName.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue != null) {
-                ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributesForResearch(newValue.toString()));
+                ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributes(newValue.toString()));
                 attributeName.setItems(attributeNames);
             }
         });

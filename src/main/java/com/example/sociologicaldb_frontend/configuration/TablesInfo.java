@@ -18,19 +18,13 @@ public final class TablesInfo {
             "Социология", List.of("Друзья","Подписки","Подписки образование","Подписки опасные")
     ); //дополнить социологию
 
-    public static List<String> getAttributesForResearch(String researchName) {
+    public static List<String> getAttributes(String researchName) {
         return RESEARCH_ATTRIBUTES.getOrDefault(researchName, List.of());
     }
 
     public static List<String> getAllResearchNames() {
         return RESEARCH_ATTRIBUTES.keySet().stream().collect(Collectors.toList());
     }
-
-    /*
-    public static List<String> getAllAttributes() {
-        return RESEARCH_ATTRIBUTES.values().stream().collect(Collectors.toList());
-    }
-     */
 
     private TablesInfo(){}
 }
