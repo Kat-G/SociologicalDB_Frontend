@@ -32,11 +32,11 @@
   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -->
 
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<?import java.net.URL?>
 <VBox prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.MainFrameController">
     <stylesheets>
         <URL value="@../image/styles.css" />
@@ -54,8 +54,8 @@
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#onCorrelationButtonClick" text="Корреляция" />
                   <MenuItem mnemonicParsing="false" onAction="#onVariationButtonClick" text="Вариациионный ряд" />
-                  <MenuItem mnemonicParsing="false" text="Пирсон" />
-                  <MenuItem mnemonicParsing="false" text="Топология" />
+                  <!-- <MenuItem mnemonicParsing="false" text="Пирсон" />
+                  <MenuItem mnemonicParsing="false" text="Топология" /> -->
                   <MenuItem mnemonicParsing="false" onAction="#onMAIButtonClick" text="МАИ" />
                    <!--
                    onAction="#onPearsonButtonClick"
@@ -67,22 +67,32 @@
     </MenuBar>
     <AnchorPane fx:id="pane" maxHeight="-1.0" maxWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <TreeView fx:id="treeView" prefHeight="474.0" prefWidth="238.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
-            <ImageView fx:id="logoImage" fitHeight="55.0" fitWidth="55.0" layoutX="645.0" layoutY="419.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+            <TreeView fx:id="treeView" prefHeight="474.0" prefWidth="265.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+             <!--
+             <BarChart fx:id="barChart" prefHeight="300.0" prefWidth="300.0" layoutX="250.0" layoutY="100.0" AnchorPane.leftAnchor="250.0" AnchorPane.topAnchor="100.0">
+                 <xAxis>
+                     <CategoryAxis fx:id="xAxis"  />
+                 </xAxis>
+                 <yAxis>
+                     <NumberAxis fx:id="yAxis" />
+                 </yAxis>
+             </BarChart>
+             -->
+             <ImageView fx:id="logoImage" fitHeight="55.0" fitWidth="55.0" layoutX="645.0" layoutY="419.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <image>
                   <Image url="@../image/unn_logo.png" />
                </image>
             </ImageView>
-            <Label layoutX="246.0" layoutY="26.0" prefHeight="26.0" prefWidth="154.0" text="Количество респондентов:" />
-            <Label fx:id="respLabel" layoutX="402.0" layoutY="30.0" prefHeight="18.0" prefWidth="76.0" />
-            <Button layoutX="611.0" layoutY="350.0" mnemonicParsing="false" onAction="#onMAIButtonClick" prefHeight="35.0" prefWidth="83.0" text="МАИ" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="350.0" />
-            <Button layoutX="611.0" layoutY="290.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="83.0" text="Топология" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="290.0" />
-            <Button layoutX="611.0" layoutY="230.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="83.0" text="Пирсон" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="230.0" />
+            <!-- <Label layoutX="246.0" layoutY="26.0" prefHeight="26.0" prefWidth="154.0" text="Количество респондентов:" />
+            <Label fx:id="respLabel" layoutX="402.0" layoutY="30.0" prefHeight="18.0" prefWidth="76.0" /> -->
+            <Button layoutX="611.0" layoutY="230.0" mnemonicParsing="false" onAction="#onMAIButtonClick" prefHeight="35.0" prefWidth="83.0" text="МАИ" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="230.0" />
+          <!--  <Button layoutX="611.0" layoutY="290.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="83.0" text="Топология" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="290.0" />
+            <Button layoutX="611.0" layoutY="230.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="83.0" text="Пирсон" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="230.0" />  -->
             <Button layoutX="611.0" layoutY="170.0" mnemonicParsing="false" onAction="#onVariationButtonClick" prefHeight="35.0" prefWidth="83.0" text="Вариац. ряд" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="170.0" />
             <Button layoutX="610.0" layoutY="110.0" mnemonicParsing="false" onAction="#onCorrelationButtonClick" prefHeight="35.0" prefWidth="83.0" text="Корреляция" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="110.0" />
             <Button layoutX="610.0" layoutY="50.0" mnemonicParsing="false" onAction="#onAploadButtonClick" prefHeight="35.0" prefWidth="83.0" text="Загрузка" AnchorPane.rightAnchor="15.0" AnchorPane.topAnchor="50.0" />
-            <Label layoutX="246.0" layoutY="59.0" prefHeight="26.0" prefWidth="154.0" text="Количество исследований:" />
-            <Label fx:id="resLabel" layoutX="402.0" layoutY="63.0" prefHeight="18.0" prefWidth="76.0" />
+          <!--  <Label layoutX="246.0" layoutY="59.0" prefHeight="26.0" prefWidth="154.0" text="Количество исследований:" />
+            <Label fx:id="resLabel" layoutX="402.0" layoutY="63.0" prefHeight="18.0" prefWidth="76.0" />  -->
          </children>
     </AnchorPane>
   </children>

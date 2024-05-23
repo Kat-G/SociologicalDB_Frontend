@@ -4,6 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
@@ -28,6 +32,14 @@ public class MainFrameController {
     private Label respLabel;
     @FXML
     private Label resLabel;
+    @FXML
+    private BarChart<String, Number> barChart;
+
+    @FXML
+    private CategoryAxis xAxis;
+    @FXML
+    private NumberAxis yAxis;
+
 
     @Autowired
     public MainFrameController(ConfigurableApplicationContext applicationContext) {
@@ -36,8 +48,15 @@ public class MainFrameController {
 
     public void initialize() {
         initializeTreeView();
-        //respLabel.setText("1700");
-        //resLabel.setText("4");
+
+        /*
+        xAxis.setLabel("Категория");
+        yAxis.setLabel("Значение");
+        var data = new XYChart.Series<String, Number>();
+        data.getData().add(new XYChart.Data<>("", 46));
+        barChart.getData().add(data);
+        barChart.setLegendVisible(false);
+         */
     }
 
     public void initializeTreeView() {
@@ -47,7 +66,7 @@ public class MainFrameController {
             TreeItem<String> rootItem = new TreeItem<>("Исследования");
 
             while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(",");
+                String[] parts = line.split(";");
 
                 TreeItem<String> item = new TreeItem<>(parts[0]);
                 rootItem.getChildren().add(item);
@@ -82,6 +101,7 @@ public class MainFrameController {
         stage.setTitle("Корреляционная матрица");
         stage.show();
     }
+
     public void onVariationButtonClick(ActionEvent actionEvent) {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
         Parent root = fxWeaver.loadView(VariationFrameController.class);

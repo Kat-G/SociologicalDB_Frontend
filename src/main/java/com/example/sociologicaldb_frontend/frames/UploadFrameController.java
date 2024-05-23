@@ -10,9 +10,16 @@ import javafx.stage.*;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.http.*;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 
@@ -28,6 +35,8 @@ public class UploadFrameController {
     private TextField organizationName;
     @FXML
     private Button fileButton;
+    @FXML
+    private Label statusLabel;
     private File selectedFile;
 
     @Autowired
@@ -49,6 +58,22 @@ public class UploadFrameController {
     }
 
     public void onRequestButtonClick(ActionEvent actionEvent) {
+        String url = "http://localhost:8080/api/upload/csv";
+        RestTemplate restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+        body.add("file", new FileSystemResource(selectedFile));
+        body.add("research", nameField.getValue());
+        body.add("organizations", organizationName.getText());
+
+        HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+
+        statusLabel.setText(response.getBody());
         // отправка данных - nameField.getValue(), organizationName.getText(), selectedFile
         // проверка на null перед
 
