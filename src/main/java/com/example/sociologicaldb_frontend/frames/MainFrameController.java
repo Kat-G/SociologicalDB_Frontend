@@ -8,7 +8,9 @@ import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
@@ -40,34 +42,32 @@ public class MainFrameController {
     @FXML
     private NumberAxis yAxis;
 
-
     @Autowired
     public MainFrameController(ConfigurableApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
+    @FXML
     public void initialize() {
         initializeTreeView();
-
+        // If you need to initialize the chart, you can uncomment and modify this block
         /*
         xAxis.setLabel("Категория");
         yAxis.setLabel("Значение");
-        var data = new XYChart.Series<String, Number>();
+        XYChart.Series<String, Number> data = new XYChart.Series<>();
         data.getData().add(new XYChart.Data<>("", 46));
         barChart.getData().add(data);
         barChart.setLegendVisible(false);
          */
     }
 
-    public void initializeTreeView() {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/com/example/sociologicaldb_frontend/info/treeview-info.txt"));
-            String line;
-            TreeItem<String> rootItem = new TreeItem<>("Исследования");
+    private void initializeTreeView() {
+        TreeItem<String> rootItem = new TreeItem<>("Исследования");
 
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/com/example/sociologicaldb_frontend/info/treeview-info.txt"))) {
+            String line;
             while ((line = reader.readLine()) != null) {
                 String[] parts = line.split(";");
-
                 TreeItem<String> item = new TreeItem<>(parts[0]);
                 rootItem.getChildren().add(item);
 
@@ -75,51 +75,40 @@ public class MainFrameController {
                     item.getChildren().add(new TreeItem<>(parts[i]));
                 }
             }
-
-            treeView.setRoot(rootItem);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        treeView.setRoot(rootItem);
     }
 
-    public void onAploadButtonClick(ActionEvent actionEvent) {
+    @FXML
+    private void onAploadButtonClick(ActionEvent actionEvent) {
+        loadView(UploadFrameController.class, "Загрузка исследования");
+    }
+
+    @FXML
+    private void onCorrelationButtonClick(ActionEvent actionEvent) {
+        loadView(CorrelationFrameController.class, "Корреляционная матрица");
+    }
+
+    @FXML
+    private void onVariationButtonClick(ActionEvent actionEvent) {
+        loadView(VariationFrameController.class, "Вариационный ряд");
+    }
+
+    @FXML
+    private void onMAIButtonClick(ActionEvent actionEvent) {
+        loadView(MAIStepOneFrameController.class, "МАИ. Задание иерархии");
+    }
+
+    private void loadView(Class<?> controllerClass, String title) {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(UploadFrameController.class);
+        Parent root = fxWeaver.loadView(controllerClass);
         Scene scene = new Scene(root);
         Stage stage = new Stage();
         stage.setScene(scene);
-        stage.setTitle("Загрузка исследования");
+        stage.setTitle(title);
         stage.show();
     }
-
-    public void onCorrelationButtonClick(ActionEvent actionEvent) {
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(CorrelationFrameController.class);
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Корреляционная матрица");
-        stage.show();
-    }
-
-    public void onVariationButtonClick(ActionEvent actionEvent) {
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(VariationFrameController.class);
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("Вариационный ряд");
-        stage.show();
-    }
-
-    public void onMAIButtonClick(ActionEvent actionEvent) {
-        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
-        Parent root = fxWeaver.loadView(MAIStepOneFrameController.class);
-        Scene scene = new Scene(root);
-        Stage stage = new Stage();
-        stage.setScene(scene);
-        stage.setTitle("МАИ. Задание иерархии");
-        stage.show();
-    }
-
 }

@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -22,62 +21,73 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-
 @Component
 @FxmlView("UploadFrame.fxml")
 public class UploadFrameController {
 
-    private ConfigurableApplicationContext applicationContext;
-    final FileChooser fileChooser = new FileChooser();
+    private final FileChooser fileChooser = new FileChooser();
+    private final RestTemplate restTemplate;
+    private File selectedFile;
+
     @FXML
-    private ComboBox nameField;
+    private ComboBox<String> nameField;
     @FXML
     private TextField organizationName;
     @FXML
     private Button fileButton;
     @FXML
     private Label statusLabel;
-    private File selectedFile;
 
     @Autowired
-    public UploadFrameController(ConfigurableApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
+    public UploadFrameController(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
+    @FXML
     public void initialize() {
         ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
         nameField.setItems(researchNames);
     }
 
+    @FXML
     public void onFileButtonClick(ActionEvent actionEvent) {
-        Stage stage = (Stage)fileButton.getScene().getWindow();
+        Stage stage = (Stage) fileButton.getScene().getWindow();
         fileChooser.setTitle("Выберите файл");
-        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv");
-        fileChooser.getExtensionFilters().add(extFilter);
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
         selectedFile = fileChooser.showOpenDialog(stage);
     }
 
+    @FXML
     public void onRequestButtonClick(ActionEvent actionEvent) {
-        String url = "http://localhost:8080/api/upload/csv";
-        RestTemplate restTemplate = new RestTemplate(new SimpleClientHttpRequestFactory());
+        if (selectedFile == null) {
+            statusLabel.setText("Пожалуйста, выберите файл.");
+            return;
+        }
+        if (nameField.getValue() == null || nameField.getValue().isEmpty()) {
+            statusLabel.setText("Пожалуйста, выберите исследование.");
+            return;
+        }
+        if (organizationName.getText() == null || organizationName.getText().isEmpty()) {
+            statusLabel.setText("Пожалуйста, введите название организации.");
+            return;
+        }
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        String url = "http://localhost:8080/api/upload/csv";
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("file", new FileSystemResource(selectedFile));
         body.add("research", nameField.getValue());
         body.add("organizations", organizationName.getText());
 
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(body, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
-
-        statusLabel.setText(response.getBody());
-        // отправка данных - nameField.getValue(), organizationName.getText(), selectedFile
-        // проверка на null перед
-
-        // при получении ответа - вывод сообщения в statusLabel
+        try {
+            ResponseEntity<String> response = restTemplate.postForEntity(url, requestEntity, String.class);
+            statusLabel.setText(response.getBody());
+        } catch (Exception e) {
+            statusLabel.setText("Произошла ошибка при загрузке файла: " + e.getMessage());
+        }
     }
-
 }
