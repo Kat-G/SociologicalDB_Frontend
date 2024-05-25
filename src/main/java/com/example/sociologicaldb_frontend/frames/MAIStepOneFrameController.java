@@ -2,8 +2,6 @@ package com.example.sociologicaldb_frontend.frames;
 
 import com.example.sociologicaldb_frontend.configuration.CustomTreeNode;
 import com.example.sociologicaldb_frontend.configuration.TablesInfo;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -20,16 +18,12 @@ import org.springframework.stereotype.Component;
 @Component
 @FxmlView("MaiStepOneFrame.fxml")
 public class MAIStepOneFrameController {
-    private ConfigurableApplicationContext applicationContext;
+    private final ConfigurableApplicationContext applicationContext;
 
     @FXML
     private AnchorPane anchorPane;
     @FXML
     private TreeView<CustomTreeNode> treeView;
-    @FXML
-    private Button addButton;
-    @FXML
-    private Button nextButton;
     @FXML
     private RadioButton addNodeRadioButton;
     @FXML
@@ -61,15 +55,8 @@ public class MAIStepOneFrameController {
                 attributeTableComboBox.setVisible(true);
                 attributeComboBox.setVisible(true);
 
-                ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
-                attributeTableComboBox.setItems(researchNames);
-                attributeTableComboBox.getSelectionModel().selectedItemProperty().addListener((observableTwo, oldTableNameValue, newTableNameValue) -> {
-                    if (newTableNameValue != null) {
-                        ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributes(newTableNameValue.toString()));
-
-                        attributeComboBox.setItems(attributeNames);
-                    }
-                });
+                TablesInfo tablesInfo = new TablesInfo();
+                tablesInfo.initializeTableView(attributeTableComboBox,attributeComboBox);
             }
         });
     }
@@ -138,11 +125,6 @@ public class MAIStepOneFrameController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    public boolean checkAllNodesAreAttributes(TreeItem<CustomTreeNode> root) {
-        //!!!
-        return true;
     }
 
     public boolean allPathsEndWithAttributes(TreeItem<CustomTreeNode> root) {

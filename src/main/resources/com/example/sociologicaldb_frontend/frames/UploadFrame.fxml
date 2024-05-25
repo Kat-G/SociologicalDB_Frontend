@@ -22,7 +22,7 @@
             <Image url="@../image/unn_logo.png" />
          </image>
       </ImageView>
-      <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="175.0" layoutY="256.0" prefHeight="30.0" prefWidth="183.0" AnchorPane.bottomAnchor="68.0" AnchorPane.leftAnchor="175.0" AnchorPane.rightAnchor="141.60000000000002" AnchorPane.topAnchor="256.0" />
+      <Label fx:id="statusLabel" alignment="CENTER" contentDisplay="CENTER" layoutX="175.0" layoutY="256.0" prefHeight="30.0" prefWidth="220.0" AnchorPane.bottomAnchor="68.0" AnchorPane.leftAnchor="150.0" AnchorPane.rightAnchor="150.0" AnchorPane.topAnchor="256.0" />
       <Label alignment="CENTER_RIGHT" layoutX="85.0" layoutY="134.0" prefHeight="26.0" prefWidth="163.0" text="Название организации:" />
       <TextField fx:id="organizationName" layoutX="256.0" layoutY="135.0" />
    </children>

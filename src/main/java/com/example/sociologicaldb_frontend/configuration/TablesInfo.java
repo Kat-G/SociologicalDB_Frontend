@@ -1,8 +1,12 @@
 package com.example.sociologicaldb_frontend.configuration;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public final class TablesInfo {
     public static final Map<String, List<String>> RESEARCH_ATTRIBUTES = Map.of(
@@ -77,8 +81,21 @@ public final class TablesInfo {
     }
 
     public static List<String> getAllResearchNames() {
-        return RESEARCH_ATTRIBUTES.keySet().stream().collect(Collectors.toList());
+        return new ArrayList<>(RESEARCH_ATTRIBUTES.keySet());
     }
 
-    private TablesInfo(){}
+    public void initializeTableView(ComboBox<String> tableName, ComboBox<String> attributeName) {
+        ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
+
+        tableName.setItems(researchNames);
+
+        tableName.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                ObservableList<String> attributeNames = FXCollections.observableArrayList(TablesInfo.getAttributes(newValue.toString()));
+                attributeName.setItems(attributeNames);
+            }
+        });
+    }
+
+    public TablesInfo(){}
 }

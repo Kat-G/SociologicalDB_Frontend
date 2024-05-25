@@ -9,7 +9,6 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
@@ -18,8 +17,6 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 @Component
 @FxmlView("UploadFrame.fxml")
