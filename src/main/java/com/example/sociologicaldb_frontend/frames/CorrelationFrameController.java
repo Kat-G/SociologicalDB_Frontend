@@ -103,10 +103,6 @@ public class CorrelationFrameController {
         }
 
         if (responseBody != null) {
-            for (List<Double> pair : responseBody) {
-                System.out.println(pair);
-            }
-
             fillTableView(responseBody);
 
             tabPane.setVisible(true);
@@ -126,6 +122,7 @@ public class CorrelationFrameController {
             final int columnIndex = i;
             column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().get(columnIndex)));
             column.setMinWidth(columnWidth);
+            column.setStyle("-fx-alignment: CENTER;");
             tableView.getColumns().add(column);
         }
 

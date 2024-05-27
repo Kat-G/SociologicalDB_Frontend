@@ -1,35 +1,55 @@
 package com.example.sociologicaldb_frontend.frames;
 
 import com.example.sociologicaldb_frontend.configuration.CustomTreeNode;
-import com.example.sociologicaldb_frontend.configuration.TablesInfo;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import com.example.sociologicaldb_frontend.frames.requestInfo.HierarchyRequest;
+import com.example.sociologicaldb_frontend.frames.requestInfo.NodeRequest;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
+import java.util.*;
 
 @Component
 @FxmlView("MaiStepTwoFrame.fxml")
 public class MAIStepTwoFrameController {
-    private ConfigurableApplicationContext applicationContext;
-
+    private final ConfigurableApplicationContext applicationContext;
+    private final RestTemplate restTemplate;
+    @FXML
+    private AnchorPane anchorPane;
     @FXML
     private VBox contentBox;
     @FXML
     private TreeView<CustomTreeNode> treeView;
+    @FXML
+    private TextField lowborderTextField;
+    private final Set<String> visitedNodes = new HashSet<>();
+    private final List<NodeRequest> nodeList = new ArrayList<>();
+    private final List<String> inequality = new ArrayList<>();
 
     public void initData(TreeItem<CustomTreeNode> root) {
         treeView.setRoot(root);
+    }
+
+    @Autowired
+    public MAIStepTwoFrameController(ConfigurableApplicationContext applicationContext, RestTemplate restTemplate) {
+        this.applicationContext = applicationContext;
+        this.restTemplate = restTemplate;
     }
 
     @FXML
@@ -39,9 +59,20 @@ public class MAIStepTwoFrameController {
 
     @FXML
     private void onCalcMAIButtonClick() {
-        // проверка ввода данных
-        // отправка на сервер и получение результата
-        // передача результата следующему контроллеру и открытие нового окна
+        if (lowborderTextField.getText() == null || lowborderTextField.getText().isEmpty()) {
+            showAlert("Пожалуйста, введите значение нижней границы");
+            return;
+        }
+        if(validateRelations()) {
+            List<Map<String, Map<Double, Double>>> response = sendHierarchyRequest();
+            for (Map<String, Map<Double, Double>> pairMap: response)
+                System.out.println(pairMap);
+            loadView(response);
+
+            visitedNodes.clear();
+            nodeList.clear();
+            inequality.clear();
+        }
     }
 
     private void addNewRelationSet() {
@@ -83,7 +114,7 @@ public class MAIStepTwoFrameController {
             TreeItem<CustomTreeNode> selectedItem = treeView.getSelectionModel().getSelectedItem();
             if (selectedItem == null) {
                 showAlert("Пожалуйста, выберите элемент из дерева.");
-            } else if (selectedItem.getValue().getName() == customTreeNode.getName()) {
+            } else if (selectedItem.getValue().getName().equals(customTreeNode.getName())) {
                 showAlert("Пожалуйста, выберите разные элементы из дерева.");
             } else if (!selectedItem.getValue().isSameParent(customTreeNode)) {
                 showAlert("Пожалуйста, выберите элементы одного уровня иерархии.");
@@ -97,16 +128,108 @@ public class MAIStepTwoFrameController {
         contentBox.getChildren().add(relationSet);
     }
 
+    private void loadView(List<Map<String, Map<Double, Double>>> response) {
+        FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
+        Parent root = fxWeaver.loadView(MAIResultFrameController.class);
+        MAIResultFrameController controller = fxWeaver.getBean(MAIResultFrameController.class);
+        controller.initData(response);
+        Stage stage = (Stage) treeView.getScene().getWindow();
+        stage.close();
+        Scene scene = new Scene(root);
+        stage = new Stage();
+        stage.setScene(scene);
+        stage.setTitle("МАИ");
+        stage.show();
+    }
+
+    public List<Map<String, Map<Double, Double>>> sendHierarchyRequest() {
+        String url = "http://localhost:8080/api/operations/hierarchy";
+
+        createListOfNodes(treeView.getRoot());
+        createListOfRelations();
+        Double number = Double.parseDouble(lowborderTextField.getText());
+        HierarchyRequest hierarchyRequest = new HierarchyRequest(nodeList,inequality,number);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<HierarchyRequest> request = new HttpEntity<>(hierarchyRequest, headers);
+
+        ResponseEntity<List> response = restTemplate.postForEntity(url, request, List.class);
+
+        return response.getBody();
+    }
+
+    private void createListOfNodes(TreeItem<CustomTreeNode> root) {
+        addNodeToList(root);
+        for (TreeItem<CustomTreeNode> child : root.getChildren()) {
+            createListOfNodes(child);
+        }
+    }
+
+    private boolean validateRelations() {
+        boolean atLeastOneValid = false;
+
+        for (Node node : contentBox.getChildren()) {
+            if (node instanceof HBox) {
+                HBox relationSet = (HBox) node;
+                String text1 = ((TextField) relationSet.getChildren().get(0)).getText();
+                String operator = ((ComboBox<String>) relationSet.getChildren().get(2)).getValue();
+                String value = ((TextField) relationSet.getChildren().get(3)).getText();
+                String text2 = ((TextField) relationSet.getChildren().get(4)).getText();
+
+                if (!text1.isEmpty() && operator != null && !value.isEmpty() && !text2.isEmpty()) {
+                    atLeastOneValid = true;
+                } else if (!text1.isEmpty() || operator != null || !value.isEmpty() || !text2.isEmpty()) {
+                    showAlert("Пожалуйста, заполните все поля для каждого соотношения.");
+                    return false;
+                }
+            }
+        }
+
+        if (!atLeastOneValid) {
+            showAlert("Пожалуйста, введите хотя бы одно отношение.");
+            return false;
+        }
+
+        return true;
+    }
+
+    private void addNodeToList(TreeItem<CustomTreeNode> node) {
+        CustomTreeNode value = node.getValue();
+        String nodeName = value.getName();
+
+        if (!visitedNodes.contains(nodeName)) {
+            String parentName = node.getParent() == null ? "" : node.getParent().getValue().getName();
+            nodeList.add(new NodeRequest(nodeName, parentName));
+            visitedNodes.add(nodeName);
+        }
+    }
+
+    private void createListOfRelations() {
+        for (Node node : contentBox.getChildren()) {
+            StringBuilder relations = new StringBuilder();
+            if (node instanceof HBox relationSet) {
+                String text1 = ((TextField) relationSet.getChildren().get(0)).getText();
+                String operator = ((ComboBox<String>) relationSet.getChildren().get(2)).getValue();
+                String value = ((TextField) relationSet.getChildren().get(3)).getText();
+                String text2 = ((TextField) relationSet.getChildren().get(4)).getText();
+
+                if (!text1.isEmpty() && operator != null && !value.isEmpty() && !text2.isEmpty()) {
+                    relations.append(text1).append(";")
+                            .append(operator).append(";")
+                            .append(value).append(";")
+                            .append(text2);
+                }
+            }
+            inequality.add(relations.toString());
+        }
+    }
+
     private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle("Предупреждение");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    @Autowired
-    public MAIStepTwoFrameController(ConfigurableApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
     }
 }

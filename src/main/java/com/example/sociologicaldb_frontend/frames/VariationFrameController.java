@@ -92,11 +92,18 @@ public class VariationFrameController {
 
         double columnWidth = tableView.getPrefWidth() / 2;
 
+        Map<String, String> columnTitles = Map.of(
+                "first", "Интервал",
+                "second", "Количество"
+        );
+
         Map<String, Object> firstRow = responseData.get(0);
         for (String key : firstRow.keySet()) {
-            TableColumn<Map<String, Object>, String> column = new TableColumn<>(key);
+            String columnTitle = columnTitles.getOrDefault(key, key);
+            TableColumn<Map<String, Object>, String> column = new TableColumn<>(columnTitle);
             column.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().get(key).toString()));
             column.setPrefWidth(columnWidth);
+            column.setStyle("-fx-alignment: CENTER;");
             tableView.getColumns().add(column);
         }
         

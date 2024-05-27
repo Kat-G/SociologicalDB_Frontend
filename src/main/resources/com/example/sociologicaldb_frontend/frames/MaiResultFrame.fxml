@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<?import java.net.URL?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.MAIResultFrameController">
+   <stylesheets>
+      <URL value="@../image/styles.css" />
+   </stylesheets>
+   <children>
+      <TableView fx:id="tableView" layoutX="20.0" layoutY="18.0" prefHeight="364.0" prefWidth="420.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="20.0" AnchorPane.topAnchor="18.0">
+      </TableView>
+      <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="445.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
+      <image>
+         <Image url="@../image/unn_logo.png" />
+      </image>
+   </ImageView>
+   </children>
+</AnchorPane>
