@@ -64,11 +64,15 @@ public class MAIStepTwoFrameController {
             return;
         }
         if(validateRelations()) {
-            List<Map<String, Map<Double, Double>>> response = sendHierarchyRequest();
-            for (Map<String, Map<Double, Double>> pairMap: response)
-                System.out.println(pairMap);
-            loadView(response);
+            try {
+                List<Map<String, Map<Double, Double>>> response = sendHierarchyRequest();
 
+                loadView(response);
+            }
+            catch (Exception e){
+                System.out.println(e);
+                return;
+            }
             visitedNodes.clear();
             nodeList.clear();
             inequality.clear();
@@ -146,6 +150,9 @@ public class MAIStepTwoFrameController {
         String url = "http://localhost:8080/api/operations/hierarchy";
 
         createListOfNodes(treeView.getRoot());
+        for (NodeRequest nodeRequest : nodeList) {
+            System.out.println(nodeRequest.toString());
+        }
         createListOfRelations();
         Double number = Double.parseDouble(lowborderTextField.getText());
         HierarchyRequest hierarchyRequest = new HierarchyRequest(nodeList,inequality,number);
@@ -199,8 +206,13 @@ public class MAIStepTwoFrameController {
         String nodeName = value.getName();
 
         if (!visitedNodes.contains(nodeName)) {
-            String parentName = node.getParent() == null ? "" : node.getParent().getValue().getName();
-            nodeList.add(new NodeRequest(nodeName, parentName));
+            if(node.getValue().isAttribute() && node.getParent().getValue().isAttribute()){
+                String name = node.getParent().getValue().getName() + "." + nodeName;
+                nodeList.add(new NodeRequest(name, node.getParent().getValue().getName()));
+            } else {
+                String parentName = node.getParent() == null ? "" : node.getParent().getValue().getName();
+                nodeList.add(new NodeRequest(nodeName, parentName));
+            }
             visitedNodes.add(nodeName);
         }
     }
