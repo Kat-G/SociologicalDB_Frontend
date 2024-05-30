@@ -48,6 +48,7 @@ public class UploadFrameController {
 
     @FXML
     public void onFileButtonClick(ActionEvent actionEvent) {
+        statusLabel.setText("");
         Stage stage = (Stage) fileButton.getScene().getWindow();
         fileChooser.setTitle("Выберите файл");
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
