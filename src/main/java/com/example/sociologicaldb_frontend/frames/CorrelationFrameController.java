@@ -2,6 +2,7 @@ package com.example.sociologicaldb_frontend.frames;
 
 import com.example.sociologicaldb_frontend.configuration.TablesInfo;
 import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -81,6 +83,7 @@ public class CorrelationFrameController {
         if (corrCheckBox.isSelected()){
             uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
                     .queryParam("table1", tableNameOne.getValue())
+                    .queryParam("table2", tableNameTwo.getValue())
                     .encode()
                     .build()
                     .toUri();
@@ -88,7 +91,6 @@ public class CorrelationFrameController {
         else {
             uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
                     .queryParam("table1", tableNameOne.getValue())
-                    .queryParam("table2", tableNameTwo.getValue())
                     .encode()
                     .build()
                     .toUri();
@@ -103,38 +105,63 @@ public class CorrelationFrameController {
         }
 
         if (responseBody != null) {
-            fillTableView(responseBody);
+            if(corrCheckBox.isSelected()) {
+                fillTableView(responseBody, TablesInfo.getAttributes(tableNameOne.getValue()),TablesInfo.getAttributes(tableNameOne.getValue()));
+            }
+            else {
+                fillTableView(responseBody, TablesInfo.getAttributes(tableNameOne.getValue()),TablesInfo.getAttributes(tableNameTwo.getValue()));
+            }
 
             tabPane.setVisible(true);
         }
-
     }
 
-    private void fillTableView(List<List<Double>> responseData) {
-        int columnCount = responseData.get(0).size();
-
+    private void fillTableView(List<List<Double>> responseData, List<String> rowAttributes, List<String> columnAttributes) {
         tableView.getColumns().clear();
 
-        double columnWidth = tableView.getWidth() / columnCount;
 
-        for (int i = 0; i < columnCount; i++) {
-            TableColumn<ObservableList<Double>, Double> column = new TableColumn<>("Column " + (i + 1));
+        TableColumn<ObservableList<Double>, String> rowHeaderColumn = new TableColumn<>("");
+        rowHeaderColumn.setCellValueFactory(cellData -> {
+            int rowIndex = tableView.getItems().indexOf(cellData.getValue());
+            if (rowIndex >= 0 && rowIndex < rowAttributes.size()) {
+                return new SimpleStringProperty(rowAttributes.get(rowIndex));
+            } else {
+                return new SimpleStringProperty("");
+            }
+        });
+        rowHeaderColumn.setMinWidth(tableView.getWidth() / (columnAttributes.size() + 1));
+        rowHeaderColumn.setStyle("-fx-alignment: CENTER;");
+        tableView.getColumns().add(rowHeaderColumn);
+
+
+        for (int i = 0; i < columnAttributes.size(); i++) {
+            TableColumn<ObservableList<Double>, Double> column = new TableColumn<>(columnAttributes.get(i));
             final int columnIndex = i;
-            column.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().get(columnIndex)));
-            column.setMinWidth(columnWidth);
+            column.setCellValueFactory(cellData -> {
+                if (cellData.getValue().size() > columnIndex) {
+                    return new SimpleObjectProperty<>(cellData.getValue().get(columnIndex));
+                } else {
+                    return new SimpleObjectProperty<>(null);
+                }
+            });
+            column.setMinWidth(tableView.getWidth() / (columnAttributes.size() + 1));
             column.setStyle("-fx-alignment: CENTER;");
             tableView.getColumns().add(column);
         }
 
+
         ObservableList<ObservableList<Double>> tableData = FXCollections.observableArrayList();
+
+
         for (List<Double> rowData : responseData) {
-            ObservableList<Double> row = FXCollections.observableArrayList();
-            row.addAll(rowData);
+            ObservableList<Double> row = FXCollections.observableArrayList(rowData);
             tableData.add(row);
         }
 
+
         tableView.setItems(tableData);
     }
+
 
     private void showAlert() {
         Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -143,4 +170,5 @@ public class CorrelationFrameController {
         alert.setContentText("Пожалуйста, выберите название таблицы");
         alert.showAndWait();
     }
+
 }

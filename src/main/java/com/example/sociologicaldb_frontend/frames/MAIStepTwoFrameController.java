@@ -206,9 +206,8 @@ public class MAIStepTwoFrameController {
         String nodeName = value.getName();
 
         if (!visitedNodes.contains(nodeName)) {
-            if(node.getValue().isAttribute() && node.getParent().getValue().isAttribute()){
-                String name = node.getParent().getValue().getName() + "." + nodeName;
-                nodeList.add(new NodeRequest(name, node.getParent().getValue().getName()));
+            if(node.getValue().isAttribute()){
+                nodeList.add(new NodeRequest(nodeName, node.getParent().getValue().getName()));
             } else {
                 String parentName = node.getParent() == null ? "" : node.getParent().getValue().getName();
                 nodeList.add(new NodeRequest(nodeName, parentName));
@@ -227,9 +226,9 @@ public class MAIStepTwoFrameController {
                 String text2 = ((TextField) relationSet.getChildren().get(4)).getText();
 
                 if (!text1.isEmpty() && operator != null && !value.isEmpty() && !text2.isEmpty()) {
-                    relations.append(text1).append(";")
-                            .append(operator).append(";")
-                            .append(value).append(";")
+                    relations.append(text1).append("|")
+                            .append(operator).append("|")
+                            .append(value).append("|")
                             .append(text2);
                 }
             }

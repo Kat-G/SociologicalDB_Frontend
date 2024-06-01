@@ -77,10 +77,6 @@ public class VariationFrameController {
         }
 
         if (responseBody != null) {
-
-            for (Map<String, Object> pair : responseBody) {
-                System.out.println(pair);
-            }
             fillTableView(responseBody);
             fillPaiChart(responseBody);
             tabPane.setVisible(true);

@@ -90,29 +90,16 @@ public class MAIStepOneFrameController {
                 showAlert("Нельзя добавлять атрибуты к атрибутам.");
                 return;
             }
-            String attribute = attributeComboBox.getSelectionModel().getSelectedItem();
             String attributeTableName = attributeTableComboBox.getSelectionModel().getSelectedItem();
-            if (attribute == null) {
+            String attribute = attributeTableName + "." + attributeComboBox.getSelectionModel().getSelectedItem();
+                if (attribute == null) {
                 showAlert("Пожалуйста, выберите атрибут.");
                 return;
             }
-            TreeItem<CustomTreeNode> tableNode = null;
-            for (TreeItem<CustomTreeNode> child : selectedItem.getChildren()) {
-                if (child.getValue().getName().equals(attributeTableName)) {
-                    tableNode = child;
-                    break;
-                }
-            }
 
-            if (tableNode == null) {
-                tableNode = new TreeItem<>(new CustomTreeNode(attributeTableName, true,selectedItem.getValue()));
-                selectedItem.getChildren().add(tableNode);
-                selectedItem.setExpanded(true);
-            }
-
-            TreeItem<CustomTreeNode> newAttribute = new TreeItem<>(new CustomTreeNode(attribute, true, tableNode.getValue()));
-            tableNode.getChildren().add(newAttribute);
-            tableNode.setExpanded(true);
+            TreeItem<CustomTreeNode> newAttribute = new TreeItem<>(new CustomTreeNode(attribute, true, selectedItem.getValue()));
+            selectedItem.getChildren().add(newAttribute);
+            selectedItem.setExpanded(true);
 
             attributeTableComboBox.getSelectionModel().clearSelection();
             attributeComboBox.getSelectionModel().clearSelection();
