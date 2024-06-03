@@ -65,7 +65,7 @@ public class MAIStepTwoFrameController {
         }
         if(validateRelations()) {
             try {
-                List<Map<String, Map<Double, Double>>> response = sendHierarchyRequest();
+                List<Map<String, Map<String, Double>>> response = sendHierarchyRequest();
 
                 loadView(response);
             }
@@ -132,7 +132,7 @@ public class MAIStepTwoFrameController {
         contentBox.getChildren().add(relationSet);
     }
 
-    private void loadView(List<Map<String, Map<Double, Double>>> response) {
+    private void loadView(List<Map<String, Map<String, Double>>> response) {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
         Parent root = fxWeaver.loadView(MAIResultFrameController.class);
         MAIResultFrameController controller = fxWeaver.getBean(MAIResultFrameController.class);
@@ -146,13 +146,10 @@ public class MAIStepTwoFrameController {
         stage.show();
     }
 
-    public List<Map<String, Map<Double, Double>>> sendHierarchyRequest() {
+    public List<Map<String, Map<String, Double>>> sendHierarchyRequest() {
         String url = "http://localhost:8080/api/operations/hierarchy";
 
         createListOfNodes(treeView.getRoot());
-        for (NodeRequest nodeRequest : nodeList) {
-            System.out.println(nodeRequest.toString());
-        }
         createListOfRelations();
         Double number = Double.parseDouble(lowborderTextField.getText());
         HierarchyRequest hierarchyRequest = new HierarchyRequest(nodeList,inequality,number);

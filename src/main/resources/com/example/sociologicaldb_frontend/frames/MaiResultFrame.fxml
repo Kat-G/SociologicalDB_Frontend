@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import java.net.URL?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -11,12 +12,13 @@
       <URL value="@../image/styles.css" />
    </stylesheets>
    <children>
-      <TableView fx:id="tableView" layoutX="20.0" layoutY="18.0" prefHeight="364.0" prefWidth="420.0" AnchorPane.bottomAnchor="18.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="60.0" AnchorPane.topAnchor="18.0">
+      <TableView fx:id="tableView" layoutX="20.0" layoutY="19.2" prefHeight="362.0" prefWidth="385.0" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="19.0">
       </TableView>
       <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="445.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <image>
          <Image url="@../image/unn_logo.png" />
       </image>
    </ImageView>
+      <Button fx:id="saveButton" layoutX="415.0" layoutY="20.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Сохранить" />
    </children>
 </AnchorPane>

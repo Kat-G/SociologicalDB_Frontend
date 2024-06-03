@@ -1,7 +1,7 @@
 package com.example.sociologicaldb_frontend.frames;
 
 import com.example.sociologicaldb_frontend.configuration.CustomTreeNode;
-import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import com.example.sociologicaldb_frontend.configuration.TableInfo;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -55,8 +55,7 @@ public class MAIStepOneFrameController {
                 attributeTableComboBox.setVisible(true);
                 attributeComboBox.setVisible(true);
 
-                TablesInfo tablesInfo = new TablesInfo();
-                tablesInfo.initializeTableView(attributeTableComboBox,attributeComboBox);
+                TableInfo.initializeTableView(attributeTableComboBox,attributeComboBox);
             }
         });
     }

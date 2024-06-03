@@ -1,6 +1,7 @@
 package com.example.sociologicaldb_frontend.frames;
 
-import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import com.example.sociologicaldb_frontend.configuration.ConverterToCSV;
+import com.example.sociologicaldb_frontend.configuration.TableInfo;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -8,6 +9,8 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +18,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.*;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +26,9 @@ import java.util.List;
 @Component
 @FxmlView("CorrelationFrame.fxml")
 public class CorrelationFrameController {
-
     private final RestTemplate restTemplate;
+    @FXML
+    private Button saveButton;
     @FXML
     private ComboBox<String> tableNameOne;
     @FXML
@@ -36,6 +41,7 @@ public class CorrelationFrameController {
     private TabPane tabPane;
     @FXML
     private TableView tableView;
+    private List<List<Double>> responseData = new ArrayList<>();
 
     @Autowired
     public CorrelationFrameController(RestTemplate restTemplate) {
@@ -44,7 +50,7 @@ public class CorrelationFrameController {
 
     @FXML
     public void initialize() {
-        ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
+        ObservableList<String> researchNames = FXCollections.observableArrayList(TableInfo.getAllResearchNames());
         tableNameOne.setItems(researchNames);
 
         tableNameOne.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -105,20 +111,45 @@ public class CorrelationFrameController {
         }
 
         if (responseBody != null) {
+            responseData = responseBody;
             if(corrCheckBox.isSelected()) {
-                fillTableView(responseBody, TablesInfo.getAttributes(tableNameOne.getValue()),TablesInfo.getAttributes(tableNameOne.getValue()));
+                fillTableView(TableInfo.getAttributes(tableNameOne.getValue()), TableInfo.getAttributes(tableNameOne.getValue()));
             }
             else {
-                fillTableView(responseBody, TablesInfo.getAttributes(tableNameOne.getValue()),TablesInfo.getAttributes(tableNameTwo.getValue()));
+                fillTableView(TableInfo.getAttributes(tableNameOne.getValue()), TableInfo.getAttributes(tableNameTwo.getValue()));
             }
 
+            saveButton.setVisible(true);
             tabPane.setVisible(true);
         }
     }
 
-    private void fillTableView(List<List<Double>> responseData, List<String> rowAttributes, List<String> columnAttributes) {
-        tableView.getColumns().clear();
+    @FXML
+    public void onSaveButtonClick(ActionEvent actionEvent) {
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Сохранить файл");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
 
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf8"))) {
+                String text;
+                if(corrCheckBox.isSelected()) {
+                    text = ConverterToCSV.convertCorrInfo(responseData, TableInfo.getAttributes(tableNameOne.getValue()), TableInfo.getAttributes(tableNameOne.getValue()));
+                }
+                else {
+                    text = ConverterToCSV.convertCorrInfo(responseData, TableInfo.getAttributes(tableNameOne.getValue()), TableInfo.getAttributes(tableNameTwo.getValue()));
+                }
+                writer.write(text);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void fillTableView(List<String> rowAttributes, List<String> columnAttributes) {
+        tableView.getColumns().clear();
 
         TableColumn<ObservableList<Double>, String> rowHeaderColumn = new TableColumn<>("");
         rowHeaderColumn.setCellValueFactory(cellData -> {
@@ -132,7 +163,6 @@ public class CorrelationFrameController {
         rowHeaderColumn.setMinWidth(tableView.getWidth() / (columnAttributes.size() + 1));
         rowHeaderColumn.setStyle("-fx-alignment: CENTER;");
         tableView.getColumns().add(rowHeaderColumn);
-
 
         for (int i = 0; i < columnAttributes.size(); i++) {
             TableColumn<ObservableList<Double>, Double> column = new TableColumn<>(columnAttributes.get(i));
@@ -149,15 +179,12 @@ public class CorrelationFrameController {
             tableView.getColumns().add(column);
         }
 
-
         ObservableList<ObservableList<Double>> tableData = FXCollections.observableArrayList();
-
 
         for (List<Double> rowData : responseData) {
             ObservableList<Double> row = FXCollections.observableArrayList(rowData);
             tableData.add(row);
         }
-
 
         tableView.setItems(tableData);
     }

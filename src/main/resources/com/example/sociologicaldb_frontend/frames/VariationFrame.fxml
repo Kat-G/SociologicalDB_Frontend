@@ -73,6 +73,7 @@
             <CheckBox fx:id="varCheckBox" mnemonicParsing="false" prefHeight="18.0" prefWidth="183.0" text="Без группировки значений" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <Button layoutX="415.0" layoutY="33.0" mnemonicParsing="false" onAction="#onCalcVariationButtonClick" prefHeight="26.0" prefWidth="90.0" text="Вычислить" AnchorPane.leftAnchor="415.0" AnchorPane.topAnchor="33.0" />
+      <Button layoutX="417.0" layoutY="5.0" mnemonicParsing="false" onAction="#onCalcVariationButtonClick" prefHeight="26.0" prefWidth="90.0" text="Вычислить" AnchorPane.leftAnchor="417.0" AnchorPane.topAnchor="5.0" />
+      <Button fx:id="saveButton" visible="false" layoutX="417.0" layoutY="39.0" mnemonicParsing="false" onAction="#onSaveButtonClick" prefHeight="26.0" prefWidth="90.0" text="Сохранить" />
    </children>
 </AnchorPane>

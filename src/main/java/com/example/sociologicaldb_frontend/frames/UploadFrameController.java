@@ -1,6 +1,6 @@
 package com.example.sociologicaldb_frontend.frames;
 
-import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import com.example.sociologicaldb_frontend.configuration.TableInfo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -42,7 +42,7 @@ public class UploadFrameController {
 
     @FXML
     public void initialize() {
-        ObservableList<String> researchNames = FXCollections.observableArrayList(TablesInfo.getAllResearchNames());
+        ObservableList<String> researchNames = FXCollections.observableArrayList(TableInfo.getAllResearchNames());
         nameField.setItems(researchNames);
     }
 

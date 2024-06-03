@@ -1,5 +1,7 @@
 package com.example.sociologicaldb_frontend.frames;
 
+import com.example.sociologicaldb_frontend.configuration.TableInfo;
+import com.example.sociologicaldb_frontend.configuration.TableInfoService;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.List;
 
 @Component
 @FxmlView("MainFrame.fxml")
@@ -63,20 +66,19 @@ public class MainFrameController {
 
     private void initializeTreeView() {
         TreeItem<String> rootItem = new TreeItem<>("Исследования");
+        rootItem.setExpanded(true);
 
-        try (BufferedReader reader = new BufferedReader(new FileReader("src/main/resources/com/example/sociologicaldb_frontend/info/treeview-info.txt"))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] parts = line.split(";");
-                TreeItem<String> item = new TreeItem<>(parts[0]);
-                rootItem.getChildren().add(item);
+        List<String> researchNames = TableInfo.getAllResearchNames();
 
-                for (int i = 1; i < parts.length; i++) {
-                    item.getChildren().add(new TreeItem<>(parts[i]));
-                }
+        for (String researchName : researchNames) {
+            TreeItem<String> researchItem = new TreeItem<>(researchName);
+            rootItem.getChildren().add(researchItem);
+
+            List<String> attributes = TableInfo.getAttributes(researchName);
+            for (String attribute : attributes) {
+                TreeItem<String> attributeItem = new TreeItem<>(attribute);
+                researchItem.getChildren().add(attributeItem);
             }
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         treeView.setRoot(rootItem);

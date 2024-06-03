@@ -1,6 +1,7 @@
 package com.example.sociologicaldb_frontend.frames;
 
-import com.example.sociologicaldb_frontend.configuration.TablesInfo;
+import com.example.sociologicaldb_frontend.configuration.ConverterToCSV;
+import com.example.sociologicaldb_frontend.configuration.TableInfo;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -8,6 +9,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +18,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.*;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 @Component
 @FxmlView("VariationFrame.fxml")
 public class VariationFrameController {
+    @FXML
+    private Button saveButton;
     @FXML
     private ComboBox<String> tableName;
     @FXML
@@ -35,6 +42,7 @@ public class VariationFrameController {
     @FXML
     private PieChart pieChart;
 
+    private List<Map<String, Object>> responseData = new ArrayList<>();
     private final RestTemplate restTemplate;
 
     @Autowired
@@ -44,8 +52,7 @@ public class VariationFrameController {
 
     @FXML
     public void initialize() {
-        TablesInfo tablesInfo = new TablesInfo();
-        tablesInfo.initializeTableView(tableName,attributeName);
+        TableInfo.initializeTableView(tableName,attributeName);
     }
 
     public void onCalcVariationButtonClick(ActionEvent actionEvent) {
@@ -77,13 +84,34 @@ public class VariationFrameController {
         }
 
         if (responseBody != null) {
-            fillTableView(responseBody);
-            fillPaiChart(responseBody);
+            responseData = responseBody;
+            fillTableView();
+            fillPaiChart();
+
+            saveButton.setVisible(true);
             tabPane.setVisible(true);
         }
     }
 
-    private void fillTableView(List<Map<String, Object>> responseData) {
+    @FXML
+    public void onSaveButtonClick(ActionEvent actionEvent) {
+        Stage stage = (Stage) saveButton.getScene().getWindow();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Сохранить файл");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt"));
+
+        File file = fileChooser.showSaveDialog(stage);
+        if (file != null) {
+            try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "utf8"))) {
+                String text = ConverterToCSV.convertVarInfo(responseData);
+                writer.write(text);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void fillTableView() {
         tableView.getColumns().clear();
 
         double columnWidth = tableView.getPrefWidth() / 2;
@@ -107,7 +135,7 @@ public class VariationFrameController {
         tableView.setItems(tableData);
     }
     
-    private void fillPaiChart(List<Map<String, Object>> responseData) {
+    private void fillPaiChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
 
         for (Map<String, Object> entry : responseData) {
