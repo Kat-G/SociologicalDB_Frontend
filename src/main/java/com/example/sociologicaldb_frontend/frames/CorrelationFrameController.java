@@ -89,7 +89,7 @@ public class CorrelationFrameController {
         if (corrCheckBox.isSelected()){
             uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
                     .queryParam("table1", tableNameOne.getValue())
-                    .queryParam("table2", tableNameTwo.getValue())
+                    .queryParam("table2", tableNameOne.getValue())
                     .encode()
                     .build()
                     .toUri();
@@ -97,6 +97,7 @@ public class CorrelationFrameController {
         else {
             uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
                     .queryParam("table1", tableNameOne.getValue())
+                    .queryParam("table2", tableNameTwo.getValue())
                     .encode()
                     .build()
                     .toUri();
