@@ -155,14 +155,13 @@ public class MAIStepTwoFrameController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<HierarchyRequest> request = new HttpEntity<>(hierarchyRequest, headers);
-
-        ResponseEntity<List<Map<String, Map<Double, Double>>>> response = restTemplate.exchange(
+        List<Map<String, Map<Double, Double>>> response = (List<Map<String, Map<Double, Double>>>) restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 request,
-                new ParameterizedTypeReference<List<Map<String, Map<Double, Double>>>>() {});
+                new ParameterizedTypeReference<>() {} ).getBody();
 
-        return response.getBody();
+        return response;
     }
 
     private void createListOfNodes(TreeItem<CustomTreeNode> root) {
