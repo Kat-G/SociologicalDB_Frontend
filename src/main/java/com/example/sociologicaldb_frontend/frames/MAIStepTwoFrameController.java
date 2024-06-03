@@ -16,10 +16,8 @@ import net.rgielen.fxweaver.core.FxWeaver;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -65,7 +63,7 @@ public class MAIStepTwoFrameController {
         }
         if(validateRelations()) {
             try {
-                List<Map<String, Map<String, Double>>> response = sendHierarchyRequest();
+                List<Map<String, Map<Double, Double>>> response = sendHierarchyRequest();
 
                 loadView(response);
             }
@@ -132,7 +130,7 @@ public class MAIStepTwoFrameController {
         contentBox.getChildren().add(relationSet);
     }
 
-    private void loadView(List<Map<String, Map<String, Double>>> response) {
+    private void loadView(List<Map<String, Map<Double, Double>>> response) {
         FxWeaver fxWeaver = applicationContext.getBean(FxWeaver.class);
         Parent root = fxWeaver.loadView(MAIResultFrameController.class);
         MAIResultFrameController controller = fxWeaver.getBean(MAIResultFrameController.class);
@@ -146,8 +144,8 @@ public class MAIStepTwoFrameController {
         stage.show();
     }
 
-    public List<Map<String, Map<String, Double>>> sendHierarchyRequest() {
-        String url = "http://localhost:8080/api/operations/hierarchy";
+    public List<Map<String, Map<Double, Double>>> sendHierarchyRequest() {
+        String url = "http://localhost:8082/api/operations/hierarchy";
 
         createListOfNodes(treeView.getRoot());
         createListOfRelations();
@@ -158,7 +156,11 @@ public class MAIStepTwoFrameController {
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<HierarchyRequest> request = new HttpEntity<>(hierarchyRequest, headers);
 
-        ResponseEntity<List> response = restTemplate.postForEntity(url, request, List.class);
+        ResponseEntity<List<Map<String, Map<Double, Double>>>> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                request,
+                new ParameterizedTypeReference<List<Map<String, Map<Double, Double>>>>() {});
 
         return response.getBody();
     }
@@ -226,7 +228,7 @@ public class MAIStepTwoFrameController {
                     relations.append(text1).append("|")
                             .append(operator).append("|")
                             .append(value).append("|")
-                            .append(text2);
+                            .append(text2).append("|");
                 }
             }
             inequality.add(relations.toString());
