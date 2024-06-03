@@ -97,6 +97,7 @@ public class CorrelationFrameController {
         else {
             uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
                     .queryParam("table1", tableNameOne.getValue())
+                    .queryParam("table2", tableNameTwo.getValue())
                     .encode()
                     .build()
                     .toUri();
