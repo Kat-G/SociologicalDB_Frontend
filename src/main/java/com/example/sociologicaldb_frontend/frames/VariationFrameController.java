@@ -68,7 +68,7 @@ public class VariationFrameController {
         String baseUrl = "http://localhost:8080/api/operations/variation";
 
         URI uri = UriComponentsBuilder.fromHttpUrl(baseUrl)
-                .queryParam("table", tableName.getValue())
+                .queryParam("table",  tableName.getValue())
                 .queryParam("attribute", attributeName.getValue())
                 .queryParam("variationType", varCheckBox.isSelected())
                 .encode()
@@ -137,8 +137,10 @@ public class VariationFrameController {
     
     private void fillPaiChart() {
         ObservableList<PieChart.Data> pieChartData = FXCollections.observableArrayList();
-
-        for (Map<String, Object> entry : responseData) {
+        List<Map<String, Object>> data;
+        data = responseData;
+        data.remove(data.size() - 1);
+        for (Map<String, Object> entry : data) {
             String label = entry.get("first").toString();
             Double value = Double.valueOf(entry.get("second").toString());
             pieChartData.add(new PieChart.Data(label, value));

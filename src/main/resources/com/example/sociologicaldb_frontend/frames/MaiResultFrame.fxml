@@ -19,6 +19,6 @@
          <Image url="@../image/unn_logo.png" />
       </image>
    </ImageView>
-      <Button fx:id="saveButton" layoutX="415.0" layoutY="20.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Сохранить" />
+      <Button fx:id="saveButton" layoutX="415.0" layoutY="20.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Сохранить" AnchorPane.rightAnchor="10.599999999999994" AnchorPane.topAnchor="20.0" />
    </children>
 </AnchorPane>

@@ -89,11 +89,18 @@ public class MAIStepOneFrameController {
                 showAlert("Нельзя добавлять атрибуты к атрибутам.");
                 return;
             }
+            if (attributeComboBox.getValue() == null) {
+                showAlert("Пожалуйста, заполните все значения.");
+                return;
+            }
             String attributeTableName = attributeTableComboBox.getSelectionModel().getSelectedItem();
             String attribute = attributeTableName + "." + attributeComboBox.getSelectionModel().getSelectedItem();
-                if (attribute == null) {
-                showAlert("Пожалуйста, выберите атрибут.");
-                return;
+
+            for (TreeItem<CustomTreeNode> child : treeView.getRoot().getChildren()) {
+                if (child.getValue().getName().equals(attribute)) {
+                    showAlert("Нельзя добавлять одинаковые элементы.");
+                    return;
+                }
             }
 
             TreeItem<CustomTreeNode> newAttribute = new TreeItem<>(new CustomTreeNode(attribute, true, selectedItem.getValue()));
