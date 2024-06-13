@@ -9,14 +9,14 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.MAIResultFrameController">
    <stylesheets>
-      <URL value="@../image/styles.css" />
+      <URL value="@../style/styles.css" />
    </stylesheets>
    <children>
       <TableView fx:id="tableView" layoutX="20.0" layoutY="19.2" prefHeight="362.0" prefWidth="385.0" AnchorPane.bottomAnchor="19.0" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="95.0" AnchorPane.topAnchor="19.0">
       </TableView>
       <ImageView fitHeight="55.0" fitWidth="55.0" layoutX="445.0" layoutY="245.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
       <image>
-         <Image url="@../image/unn_logo.png" />
+         <Image url="@../style/unn_logo.png" />
       </image>
    </ImageView>
       <Button fx:id="saveButton" layoutX="415.0" layoutY="20.0" mnemonicParsing="false" onAction="#onSaveButtonClick" text="Сохранить" AnchorPane.rightAnchor="10.599999999999994" AnchorPane.topAnchor="20.0" />

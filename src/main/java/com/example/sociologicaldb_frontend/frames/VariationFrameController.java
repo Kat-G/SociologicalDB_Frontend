@@ -55,6 +55,7 @@ public class VariationFrameController {
         TableInfo.initializeTableView(tableName,attributeName);
     }
 
+    @FXML
     public void onCalcVariationButtonClick(ActionEvent actionEvent) {
         if (tableName.getValue() == null || tableName.getValue().isEmpty()) {
             showAlert("Пожалуйста, выберите название таблицы");

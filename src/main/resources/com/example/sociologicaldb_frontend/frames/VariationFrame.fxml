@@ -19,7 +19,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.VariationFrameController">
    <stylesheets>
-      <URL value="@../image/styles.css" />
+      <URL value="@../style/styles.css" />
    </stylesheets>
    <children>
       <TabPane fx:id="tabPane" layoutY="86.0" prefHeight="289.0" prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" visible="false" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="86.0">
@@ -44,7 +44,7 @@
       </TabPane>
       <ImageView fx:id="logoImage" fitHeight="50.0" fitWidth="50.0" layoutX="551.0" layoutY="350.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
          <image>
-            <Image url="@../image/unn_logo.png" />
+            <Image url="@../style/unn_logo.png" />
          </image>
       </ImageView>
       <GridPane layoutX="91.2" layoutY="6.4" prefHeight="82.0" prefWidth="295.0" AnchorPane.leftAnchor="90.0" AnchorPane.rightAnchor="214.0" AnchorPane.topAnchor="5.0">

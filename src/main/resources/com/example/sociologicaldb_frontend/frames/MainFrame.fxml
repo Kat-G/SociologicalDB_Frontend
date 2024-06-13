@@ -39,7 +39,7 @@
 
 <VBox prefHeight="500.0" prefWidth="700.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.sociologicaldb_frontend.frames.MainFrameController">
     <stylesheets>
-        <URL value="@../image/styles.css" />
+        <URL value="@../style/styles.css" />
     </stylesheets>
     <children>
     <MenuBar VBox.vgrow="NEVER">
@@ -63,7 +63,7 @@
             <TreeView fx:id="treeView" prefHeight="474.0" prefWidth="265.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
              <ImageView fx:id="logoImage" fitHeight="55.0" fitWidth="55.0" layoutX="645.0" layoutY="419.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.rightAnchor="0.0">
                <image>
-                  <Image url="@../image/unn_logo.png" />
+                  <Image url="@../style/unn_logo.png" />
                </image>
             </ImageView>
             <Button layoutX="611.0" layoutY="230.0" mnemonicParsing="false" onAction="#onMAIButtonClick" prefHeight="35.0" prefWidth="83.0" text="МАИ" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="230.0" />

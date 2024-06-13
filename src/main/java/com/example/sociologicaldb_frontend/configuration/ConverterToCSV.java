@@ -30,10 +30,10 @@ public class ConverterToCSV {
 
         if (!data.isEmpty()) {
             Map<String, Object> firstRow = data.get(0);
-            StringJoiner headerJoiner = new StringJoiner(",");
+            StringJoiner headerJoiner = new StringJoiner(";");
 
             for (Map<String, Object> row : data) {
-                StringJoiner rowJoiner = new StringJoiner(",");
+                StringJoiner rowJoiner = new StringJoiner(";");
                 for (Object value : row.values()) {
                     rowJoiner.add(value.toString());
                 }
